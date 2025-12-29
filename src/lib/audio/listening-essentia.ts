@@ -8,14 +8,12 @@ export class ListeningEngineEssentia {
   private scriptNode: ScriptProcessorNode | null = null;
   private isListening: boolean = false;
   private essentia: any = null;
-  private onNoteDetected: (note: string) => void;
   
   // Recording State
   private recordedChunks: Float32Array[] = [];
   private sampleRate: number = 44100;
 
-  constructor(onNoteDetected: (note: string) => void) {
-    this.onNoteDetected = onNoteDetected;
+  constructor() {
   }
 
   public async start() {

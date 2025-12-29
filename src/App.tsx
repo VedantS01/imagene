@@ -92,26 +92,7 @@ function App() {
 
   // Listening Engine Setup
   useEffect(() => {
-    listeningEngineRef.current = new ListeningEngineEssentia((note) => {
-      // Visual feedback
-      setActiveNotes(prev => {
-        const next = new Set(prev);
-        next.add(note);
-        setTimeout(() => {
-          setActiveNotes(current => {
-            const updated = new Set(current);
-            updated.delete(note);
-            return updated;
-          });
-        }, 200);
-        return next;
-      });
-
-      // Append to script if listening
-      if (startTimeRef.current === 0) startTimeRef.current = Date.now();
-      const time = (Date.now() - startTimeRef.current) / 1000;
-      setScript(prev => `${prev}\n${note} @ ${time.toFixed(2)}s for 0.2s`);
-    });
+    listeningEngineRef.current = new ListeningEngineEssentia();
 
     return () => {
       listeningEngineRef.current?.stop();
