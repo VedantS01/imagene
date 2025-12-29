@@ -1,0 +1,15 @@
+/* App.css */
+/* Custom scrollbar for the piano container */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px;
+  background-color: #1f2937;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #4b5563;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280;
+}
