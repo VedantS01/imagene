@@ -6,8 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Real-time polyphonic piano transcription in your browser" />
     <title>Imagene - Piano Transcription</title>
-    <!-- Enable SharedArrayBuffer on GitHub Pages -->
-    <script src="/imagene/coi-serviceworker.js"></script>
+    <!-- Enable SharedArrayBuffer on GitHub Pages via service worker -->
+    <script>
+      // coi-serviceworker loader - registers service worker for COOP/COEP headers
+      if (!window.crossOriginIsolated && window.isSecureContext && navigator.serviceWorker) {
+        const basePath = '/imagene/';
+        navigator.serviceWorker.register(basePath + 'coi-serviceworker.js').then(
+          (reg) => {
+            console.log('COI Service Worker registered', reg.scope);
+            if (reg.active && !navigator.serviceWorker.controller) {
+              console.log('Reloading for COI...');
+              window.location.reload();
+            }
+            reg.addEventListener('updatefound', () => window.location.reload());
+          },
+          (err) => console.error('COI SW registration failed:', err)
+        );
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
