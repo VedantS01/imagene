@@ -15,6 +15,7 @@ dist-ssr
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+!.vscode/tasks.json
 .idea
 .DS_Store
 *.suo
@@ -22,3 +23,18 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# ONNX models (large binary files)
+public/models/*.onnx
+public/onnx/*.wasm
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# TypeScript
+*.tsbuildinfo
+
+# Testing
+coverage/
