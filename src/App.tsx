@@ -22,12 +22,15 @@ type TabType = 'library' | 'record' | 'upload';
 
 /**
  * Check if SharedArrayBuffer is available
+ * Returns a promise that resolves after a short delay to allow service worker to initialize
  */
-function checkSharedArrayBufferSupport(): boolean {
+async function checkSharedArrayBufferSupport(): Promise<boolean> {
   try {
     new SharedArrayBuffer(1);
     return true;
   } catch {
+    // If not available, wait a moment for service worker to potentially reload the page
+    // coi-serviceworker will reload on first visit to apply headers
     return false;
   }
 }
@@ -102,7 +105,7 @@ const App: React.FC = () => {
   }, [loadPieces]);
   
   useEffect(() => {
-    setIsSupported(checkSharedArrayBufferSupport());
+    checkSharedArrayBufferSupport().then(setIsSupported);
   }, []);
 
   const handleSelectPiece = useCallback((piece: LibraryPiece, musicXML: string) => {
@@ -179,22 +182,34 @@ const App: React.FC = () => {
       <div className="error-container">
         <style>{appStyles}</style>
         <div className="error-card">
-          <h2>Browser Not Supported</h2>
+          <h2>Setting Up...</h2>
           <p>
-            This application requires <code>SharedArrayBuffer</code> which is not
-            available in your browser or current context.
+            If this is your first visit, the page will automatically reload to enable
+            audio processing features.
           </p>
-          <p>
-            Please ensure you're accessing this page over HTTPS and that the server
-            sends the required headers:
+          <p style={{ marginTop: '1rem' }}>
+            If you're still seeing this after a few seconds, try:
           </p>
-          <pre>
-            {`Cross-Origin-Opener-Policy: same-origin
-Cross-Origin-Embedder-Policy: require-corp`}
-          </pre>
-          <p>
-            Try using Chrome, Firefox, or Edge with the latest updates.
-          </p>
+          <ul style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+            <li>Refreshing the page</li>
+            <li>Using Chrome, Firefox, or Edge</li>
+            <li>Ensuring you're on HTTPS</li>
+          </ul>
+          <button 
+            onClick={() => window.location.reload()}
+            style={{
+              marginTop: '1rem',
+              padding: '0.5rem 1.5rem',
+              background: '#4f46e5',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '1rem'
+            }}
+          >
+            Refresh Page
+          </button>
         </div>
       </div>
     );
