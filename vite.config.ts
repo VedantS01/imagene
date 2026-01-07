@@ -5,6 +5,8 @@ import { resolve } from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // Base path for GitHub Pages deployment
+  base: '/imagene/',
   plugins: [
     react(),
     // Required for SharedArrayBuffer support
