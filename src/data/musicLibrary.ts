@@ -3,6 +3,9 @@
  * Now loads from external MusicXML files in /public/library/
  */
 
+// Get base URL for assets (handles GitHub Pages subdirectory)
+const BASE_URL = import.meta.env.BASE_URL || '/';
+
 export interface LibraryPiece {
   id: string;
   title: string;
@@ -123,8 +126,13 @@ export async function loadMusicXML(piece: LibraryPiece): Promise<string> {
   }
 
   try {
-    console.log(`Loading MusicXML from: ${piece.filePath}`);
-    const response = await fetch(piece.filePath);
+    // Construct full path with base URL for GitHub Pages compatibility
+    const fullPath = piece.filePath.startsWith('/') 
+      ? `${BASE_URL}${piece.filePath.slice(1)}` 
+      : `${BASE_URL}${piece.filePath}`;
+    
+    console.log(`Loading MusicXML from: ${fullPath}`);
+    const response = await fetch(fullPath);
     console.log(`Response status: ${response.status} ${response.statusText}`);
     
     if (!response.ok) {

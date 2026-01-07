@@ -181,13 +181,15 @@ export class AudioEngine {
       
       // Notify processing worker of shared buffer
       if (this.processingWorker) {
+        // Use BASE_URL for GitHub Pages compatibility
+        const baseUrl = import.meta.env.BASE_URL || '/';
         this.processingWorker.postMessage({
           type: 'INIT',
           config: {
             sampleRate: this.inputSampleRate,
             windowSize: this.config.fftSize,
             hopSize: this.config.hopSize,
-            modelPath: '/models/basic-pitch.onnx',
+            modelPath: `${baseUrl}models/basic-pitch.onnx`,
             useWebGPU: await this.checkWebGPUSupport(),
             onsetThreshold: 0.8,
             offsetThreshold: 0.3,
